@@ -6,230 +6,185 @@ import seaborn as sns
 from datetime import datetime
 import plotly.graph_objects as go
 
-# Configuración de la página
+# Page configuration
 st.set_page_config(
-    page_title="Mi App Completa",
-    page_icon="📂",
+    page_title="My Complete App",
+    page_icon="🚀",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Título principal
-st.title("🔍 Mi Aplicación Streamlit Completa")
-st.write("Una aplicación con múltiples funcionalidades y componentes interactivos")
+# Main title
+st.title("🚀 My Complete Streamlit App")
+st.write("An app with multiple functionalities and interactive components")
 
-# Barra lateral para navegación
-st.sidebar.title("📊 Navegación")
+# Sidebar for navigation
+st.sidebar.title("📱 Navigation")
 app_mode = st.sidebar.selectbox(
-    "Selecciona una sección:",
-    ["🏠 Inicio", "📈 Análisis de Datos", "📊 Visualizaciones", "🧮 Calculadora", "ℹ️ Acerca de"]
+    "Select a section:",
+    ["Home", "Data Analysis", "Visualizations", "Calculator", "About"]
 )
 
-# Sección de Inicio
-if app_mode == "🏠 Inicio":
-    st.header("Bienvenido a la aplicación")
+# Home Section
+if app_mode == "Home":
+    st.header("Welcome to the App")
     st.write("""
-    Esta es una aplicación completa de Streamlit que incluye:
-    - Análisis de datos
-    - Visualizaciones interactivas
-    - Herramientas de cálculo
-    - Y mucho más...
+    This is a complete application built with Streamlit.
+    
+    **Features:**
+    - 📊 Data analysis and visualization
+    - 📈 Interactive charts
+    - 🧮 Calculator tools
+    - ⚙️ Customizable settings
+    
+    Use the sidebar to navigate between sections.
     """)
     
-    # Crear datos de ejemplo
+    # Quick metrics
     col1, col2, col3 = st.columns(3)
-    
     with col1:
-        st.metric("Usuarios", "1,234", "+123")
-    
+        st.metric("Total Users", "1,234", "+123")
     with col2:
-        st.metric("Ingresos", "$45,678", "+12%")
-    
+        st.metric("Satisfaction", "4.5/5.0", "+0.2")
     with col3:
-        st.metric("Tasa de Conversión", "23.5%", "-2%")
+        st.metric("Active Now", "57", "-3")
 
-# Sección de Análisis de Datos
-elif app_mode == "📈 Análisis de Datos":
-    st.header("Análisis de Datos")
+# Data Analysis Section
+elif app_mode == "Data Analysis":
+    st.header("📊 Data Analysis")
     
-    # Cargar o crear datos
-    uploaded_file = st.file_uploader("Sube un archivo CSV", type=['csv'])
-    
-    if uploaded_file is not None:
-        df = pd.read_csv(uploaded_file)
-    else:
-        # Datos de ejemplo
-        data = {
-            'Fecha': pd.date_range(start='2024-01-01', periods=100, freq='D'),
-            'Ventas': np.random.randint(100, 1000, 100),
-            'Clientes': np.random.randint(10, 200, 100),
-            'Producto': np.random.choice(['A', 'B', 'C', 'D'], 100)
-        }
-        df = pd.DataFrame(data)
-    
-    # Mostrar datos
-    st.subheader("Vista previa de los datos")
-    st.dataframe(df.head(), use_container_width=True)
-    
-    # Estadísticas
-    st.subheader("Estadísticas descriptivas")
-    st.write(df.describe())
-    
-    # Filtros
-    st.subheader("Filtros")
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        if 'Producto' in df.columns:
-            productos = st.multiselect(
-                "Selecciona productos:",
-                options=df['Producto'].unique(),
-                default=df['Producto'].unique()[:2]
-            )
-            if productos:
-                df = df[df['Producto'].isin(productos)]
-    
-    with col2:
-        if 'Ventas' in df.columns:
-            ventas_min, ventas_max = st.slider(
-                "Rango de ventas:",
-                min_value=int(df['Ventas'].min()),
-                max_value=int(df['Ventas'].max()),
-                value=(int(df['Ventas'].min()), int(df['Ventas'].max()))
-            )
-            df = df[(df['Ventas'] >= ventas_min) & (df['Ventas'] <= ventas_max)]
-
-# Sección de Visualizaciones
-elif app_mode == "📊 Visualizaciones":
-    st.header("Visualizaciones Interactivas")
-    
-    # Crear datos para gráficos
+    # Generate sample data
     np.random.seed(42)
-    x = np.linspace(0, 10, 100)
-    y1 = np.sin(x)
-    y2 = np.cos(x)
-    
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        st.subheader("Matplotlib")
-        fig, ax = plt.subplots()
-        ax.plot(x, y1, label='Seno', color='blue')
-        ax.plot(x, y2, label='Coseno', color='red')
-        ax.set_xlabel('X')
-        ax.set_ylabel('Y')
-        ax.legend()
-        ax.grid(True, alpha=0.3)
-        st.pyplot(fig)
-    
-    with col2:
-        st.subheader("Plotly")
-        fig = go.Figure()
-        fig.add_trace(go.Scatter(x=x, y=y1, mode='lines', name='Seno'))
-        fig.add_trace(go.Scatter(x=x, y=y2, mode='lines', name='Coseno'))
-        fig.update_layout(
-            title='Gráfico interactivo',
-            xaxis_title='X',
-            yaxis_title='Y'
-        )
-        st.plotly_chart(fig, use_container_width=True)
-    
-    # Gráfico de barras con Seaborn
-    st.subheader("Seaborn - Gráfico de barras")
     data = pd.DataFrame({
-        'Categoría': ['A', 'B', 'C', 'D', 'E'],
-        'Valores': np.random.randint(10, 100, 5)
+        'Date': pd.date_range(start='2024-01-01', periods=100, freq='D'),
+        'Sales': np.random.normal(1000, 200, 100).cumsum() + 5000,
+        'Customers': np.random.randint(50, 200, 100),
+        'Rating': np.random.uniform(3.5, 5.0, 100),
+        'Category': np.random.choice(['A', 'B', 'C', 'D'], 100)
     })
     
-    fig, ax = plt.subplots()
-    sns.barplot(data=data, x='Categoría', y='Valores', ax=ax, palette='viridis')
-    ax.set_title('Distribución por categoría')
-    st.pyplot(fig)
+    # Show data
+    st.subheader("Sample Data")
+    st.dataframe(data.head(10))
+    
+    # Statistics
+    st.subheader("Statistics")
+    st.write(data.describe())
 
-# Sección de Calculadora
-elif app_mode == "🧮 Calculadora":
-    st.header("Calculadora")
+# Visualizations Section
+elif app_mode == "Visualizations":
+    st.header("📈 Visualizations")
     
-    col1, col2, col3 = st.columns(3)
+    # Generate data
+    np.random.seed(42)
+    x = np.arange(50)
+    y = np.random.randn(50).cumsum()
     
-    with col1:
-        num1 = st.number_input("Número 1", value=0.0)
+    # Matplotlib chart
+    st.subheader("Matplotlib Chart")
+    fig, ax = plt.subplots(figsize=(10, 4))
+    ax.plot(x, y, color='blue', linewidth=2)
+    ax.set_xlabel('Time')
+    ax.set_ylabel('Value')
+    ax.set_title('Sample Time Series')
+    ax.grid(True, alpha=0.3)
+    st.pyplot(fig)
     
-    with col2:
-        operation = st.selectbox(
-            "Operación",
-            ["Suma", "Resta", "Multiplicación", "División", "Potencia"]
-        )
+    # Interactive chart with Plotly
+    st.subheader("Interactive Plotly Chart")
     
-    with col3:
-        num2 = st.number_input("Número 2", value=0.0)
+    # Create sample data
+    categories = ['A', 'B', 'C', 'D']
+    values = np.random.randint(10, 100, 4)
     
-    # Realizar cálculo
-    result = None
-    if operation == "Suma":
-        result = num1 + num2
-    elif operation == "Resta":
-        result = num1 - num2
-    elif operation == "Multiplicación":
-        result = num1 * num2
-    elif operation == "División":
-        if num2 != 0:
-            result = num1 / num2
-        else:
-            st.error("No se puede dividir por cero")
-    elif operation == "Potencia":
-        result = num1 ** num2
+    fig_plotly = go.Figure(data=[
+        go.Bar(x=categories, y=values, marker_color=['red', 'green', 'blue', 'purple'])
+    ])
     
-    if result is not None:
-        st.success(f"**Resultado:** {result}")
+    fig_plotly.update_layout(
+        title="Sales by Category",
+        xaxis_title="Category",
+        yaxis_title="Sales",
+        template="plotly_white"
+    )
     
-    # Calculadora científica adicional
-    st.subheader("Funciones científicas")
+    st.plotly_chart(fig_plotly, use_container_width=True)
+
+# Calculator Section
+elif app_mode == "Calculator":
+    st.header("🧮 Calculator")
+    
     col1, col2 = st.columns(2)
     
     with col1:
-        angle = st.slider("Ángulo (grados)", 0, 360, 45)
-        st.write(f"Sen({angle}°) = {np.sin(np.radians(angle)):.4f}")
-        st.write(f"Cos({angle}°) = {np.cos(np.radians(angle)):.4f}")
+        st.subheader("Basic Calculator")
+        num1 = st.number_input("First number", value=0.0)
+        num2 = st.number_input("Second number", value=0.0)
+        
+        operation = st.selectbox(
+            "Operation",
+            ["Addition", "Subtraction", "Multiplication", "Division"]
+        )
+        
+        if st.button("Calculate"):
+            if operation == "Addition":
+                result = num1 + num2
+            elif operation == "Subtraction":
+                result = num1 - num2
+            elif operation == "Multiplication":
+                result = num1 * num2
+            elif operation == "Division":
+                result = num1 / num2 if num2 != 0 else "Error: Division by zero"
+            
+            st.success(f"Result: {result}")
     
     with col2:
-        exp_input = st.number_input("Número para exponencial", value=1.0)
-        st.write(f"exp({exp_input}) = {np.exp(exp_input):.4f}")
-        st.write(f"log({exp_input}) = {np.log(exp_input) if exp_input > 0 else 'Indefinido'}")
+        st.subheader("Password Generator")
+        length = st.slider("Password length", 6, 20, 12)
+        
+        if st.button("Generate Password"):
+            import random
+            import string
+            
+            characters = string.ascii_letters + string.digits + "!@#$%^&*"
+            password = ''.join(random.choice(characters) for _ in range(length))
+            st.code(password, language="text")
 
-# Sección Acerca de
-elif app_mode == "ℹ️ Acerca de":
-    st.header("Acerca de esta aplicación")
+# About Section
+else:
+    st.header("ℹ️ About")
     
     st.write("""
-    ## Mi Aplicación Streamlit Completa
+    ## About This App
     
-    **Versión:** 1.0.0
+    This application was created to demonstrate the capabilities of Streamlit.
     
-    **Descripción:**
-    Esta es una aplicación demostrativa creada con Streamlit que muestra
-    diversas funcionalidades y componentes disponibles en la biblioteca.
+    **Technologies used:**
+    - Streamlit for the web interface
+    - Pandas for data manipulation
+    - NumPy for numerical operations
+    - Matplotlib and Plotly for visualizations
     
-    **Características incluidas:**
-    1. Análisis de datos con pandas
-    2. Visualizaciones con Matplotlib, Seaborn y Plotly
-    3. Componentes interactivos
-    4. Calculadora básica y científica
+    **Features:**
+    - Interactive data visualization
+    - Real-time calculations
+    - Responsive design
+    - User-friendly interface
     
-    **Tecnologías utilizadas:**
-    - Python 3.x
-    - Streamlit
-    - Pandas, NumPy
-    - Matplotlib, Seaborn, Plotly
+    This app is deployed on Streamlit Cloud and is accessible to everyone.
     """)
     
-    st.info("""
-    💡 **Consejo:** Para ejecutar esta aplicación, usa el comando:
-    ```
-    streamlit run app.py
-    ```
-    """)
+    # Contact info
+    with st.expander("Contact Information"):
+        st.write("""
+        - **Email:** example@email.com
+        - **GitHub:** github.com/username
+        - **Created on:** January 2024
+        """)
+    
+    # App info
+    st.info(f"App last updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
-# Pie de página
-st.sidebar.markdown("---")
-st.sidebar.info("© 2024 Mi App Completa. Todos los derechos reservados.")
+# Footer
+st.divider()
+st.caption("© 2024 - My Streamlit App | Built with ❤️ using Streamlit")
